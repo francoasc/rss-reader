@@ -1,16 +1,18 @@
+import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import store from "./src/redux/store";
+import AppStack from "./src/routeComponentMap";
 
 export default function App() {
   return (
     <Provider store={store}>
-      <SafeAreaView>
-        <View>
-          <Text>Hello World</Text>
-        </View>
+      <SafeAreaView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <AppStack />
+        </NavigationContainer>
       </SafeAreaView>
     </Provider>
   );
