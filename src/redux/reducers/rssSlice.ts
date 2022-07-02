@@ -1,9 +1,13 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { addHttpToUrl } from "../../utils/strings";
 // No TypeScript support for rssParser package
 // @ts-ignore
 import * as rssParser from "react-native-rss-parser";
+import {
+  sortInAscendingOrderByDate,
+  sortInDescendingOrderByDate,
+} from "../../utils/dates";
 
 export interface RssResponse {
   title: string;
@@ -15,16 +19,23 @@ export interface RssResponse {
   id: string;
 }
 
-export const errorImage =
-  "https://previews.123rf.com/images/rms164/rms1641504/rms164150400011/38672644-vector-error-icon.jpg";
+export enum RssOrder {
+  ASCENDING = "asc",
+  DESCENDING = "desc",
+}
 
 export interface RssState {
   rssList: RssResponse[];
+  order: RssOrder;
 }
 
 const initialState: RssState = {
   rssList: [],
+  order: RssOrder.DESCENDING,
 };
+
+export const errorImage =
+  "https://previews.123rf.com/images/rms164/rms1641504/rms164150400011/38672644-vector-error-icon.jpg";
 
 export const fetchRssXML = createAsyncThunk(
   "rss/fetchRssXML",
@@ -38,7 +49,20 @@ export const fetchRssXML = createAsyncThunk(
 export const rssSlice = createSlice({
   name: "rss",
   initialState,
-  reducers: {},
+  reducers: {
+    sortRssList: (state, action: PayloadAction<string>) => {
+      state.order =
+        action.payload === RssOrder.ASCENDING
+          ? RssOrder.DESCENDING
+          : RssOrder.ASCENDING;
+
+      if (state.order === RssOrder.ASCENDING)
+        state.rssList.sort(sortInAscendingOrderByDate);
+
+      if (state.order === RssOrder.DESCENDING)
+        state.rssList.sort(sortInDescendingOrderByDate);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchRssXML.fulfilled, (state, action) => {
       state.rssList = action.payload.items.map((item: any) => {
@@ -60,8 +84,16 @@ export const rssSlice = createSlice({
             : errorImage,
         };
       });
+
+      if (state.order === RssOrder.ASCENDING)
+        state.rssList.sort(sortInAscendingOrderByDate);
+
+      if (state.order === RssOrder.DESCENDING)
+        state.rssList.sort(sortInDescendingOrderByDate);
     });
   },
 });
+
+export const { sortRssList } = rssSlice.actions;
 
 export default rssSlice.reducer;
