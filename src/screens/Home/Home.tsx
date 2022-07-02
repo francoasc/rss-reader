@@ -13,7 +13,7 @@ interface Props {
 
 const Home: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const rss = useAppSelector((state) => state.rss);
+  const { rssListCopy, rssList } = useAppSelector((state) => state.rss);
 
   useEffect(() => {
     dispatch(fetchRssXML("http://www.xatakandroid.com/tag/feeds/rss2.xml"));
@@ -23,17 +23,21 @@ const Home: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TopNavigationBar />
-      {rss.rssList.length ? (
+      {rssListCopy.length ? (
         <FlatList
-          data={rss.rssList}
+          data={rssListCopy}
           renderItem={({ item }) => (
             <ArticleCard {...item} navigation={navigation} />
           )}
           keyExtractor={({ id }) => id}
         />
+      ) : rssList.length ? ( // If rssList has length means that there's data but the filter didn't find it
+        <View style={styles.noDataContainer}>
+          <Text>No se encontraron feeds con ese título</Text>
+        </View>
       ) : (
         <View style={styles.noDataContainer}>
-          <Text>No rss feed added</Text>
+          <Text>No hay feeds agregados!</Text>
         </View>
       )}
     </View>
