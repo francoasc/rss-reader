@@ -15,4 +15,9 @@ export default StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
   },
+  textInput: {
+    borderColor: "#555",
+    padding: 4,
+    borderWidth: 0.5,
+  },
 });

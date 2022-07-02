@@ -26,11 +26,13 @@ export enum RssOrder {
 
 export interface RssState {
   rssList: RssResponse[];
+  rssListCopy: RssResponse[];
   order: RssOrder;
 }
 
 const initialState: RssState = {
   rssList: [],
+  rssListCopy: [],
   order: RssOrder.DESCENDING,
 };
 
@@ -57,19 +59,31 @@ export const rssSlice = createSlice({
           : RssOrder.ASCENDING;
 
       if (state.order === RssOrder.ASCENDING)
-        state.rssList.sort(sortInAscendingOrderByDate);
+        state.rssListCopy.sort(sortInAscendingOrderByDate);
 
       if (state.order === RssOrder.DESCENDING)
-        state.rssList.sort(sortInDescendingOrderByDate);
+        state.rssListCopy.sort(sortInDescendingOrderByDate);
+    },
+    filterByTitle: (state, action: PayloadAction<string>) => {
+      const titleToSearch = action.payload.toLowerCase();
+
+      // Filling the array if no search input
+      if (action.payload === "") state.rssListCopy = [...state.rssList];
+      else {
+        state.rssListCopy = state.rssList.filter((rss) =>
+          rss.title.toLowerCase().includes(titleToSearch)
+        );
+      }
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchRssXML.fulfilled, (state, action) => {
+      const imgRegex = /<img.*?src=['"](.*?)['"]/;
+
       state.rssList = action.payload.items.map((item: any) => {
         const description = item.description
           ? item.description.trim()
           : item.content;
-        const imgRegex = /<img.*?src=['"](.*?)['"]/;
         const date = new Date(item.published);
         const imageExists = imgRegex.exec(description);
         return {
@@ -90,10 +104,12 @@ export const rssSlice = createSlice({
 
       if (state.order === RssOrder.DESCENDING)
         state.rssList.sort(sortInDescendingOrderByDate);
+
+      state.rssListCopy = [...state.rssList];
     });
   },
 });
 
-export const { sortRssList } = rssSlice.actions;
+export const { sortRssList, filterByTitle } = rssSlice.actions;
 
 export default rssSlice.reducer;
