@@ -2,16 +2,28 @@ import React from "react";
 import { View, TouchableOpacity, Image, Text } from "react-native";
 import { RssResponse } from "../../redux/reducers/rssSlice";
 import styles from "./ArticleCard.styles";
+import RouteNames from "../../routeNames";
+import { NavigationProp } from "@react-navigation/native";
 
-const ArticleCard: React.FC<RssResponse> = ({
+interface Props extends RssResponse {
+  navigation: NavigationProp<any>;
+}
+
+const ArticleCard: React.FC<Props> = ({
   description,
   title,
   image,
   stringifiedDate,
-  date,
+  url,
+  navigation,
 }) => {
   const handleCardPress = () => {
-    console.log("Card pressed");
+    navigation.navigate(RouteNames.Rss.ArticleDetail, {
+      title,
+      description,
+      image,
+      url,
+    });
   };
 
   return (
@@ -36,5 +48,5 @@ const ArticleCard: React.FC<RssResponse> = ({
     </View>
   );
 };
-// { flexShrink: 1, flex: 1 }
+
 export default ArticleCard;
