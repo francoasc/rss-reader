@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Text, View, FlatList } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import ArticleCard from "../../components/ArticleCard";
+import TopNavigationBar from "../../components/TopNavigationBar";
 import { fetchRssXML } from "../../redux/reducers/rssSlice";
 import styles from "./Home.styles";
 
@@ -16,6 +17,7 @@ const Home: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <TopNavigationBar />
       {rss.rssList.length ? (
         <FlatList
           data={rss.rssList}
