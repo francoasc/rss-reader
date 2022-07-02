@@ -1,12 +1,14 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import RouteNames from "./routeNames";
+import ArticleDetail from "./screens/ArticleDetail";
 import Home from "./screens/Home";
-
-const Stack = createStackNavigator();
 
 const router = {
   [RouteNames.Rss.Home]: Home,
+  [RouteNames.Rss.ArticleDetail]: ArticleDetail,
 };
+
+const Stack = createStackNavigator();
 
 const AppStack = () => (
   <Stack.Navigator
