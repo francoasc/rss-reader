@@ -1,3 +1,4 @@
+import { NavigationProp } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { Text, View, FlatList } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -6,13 +7,17 @@ import TopNavigationBar from "../../components/TopNavigationBar";
 import { fetchRssXML } from "../../redux/reducers/rssSlice";
 import styles from "./Home.styles";
 
-const Home: React.FC = () => {
+interface Props {
+  navigation: NavigationProp<any>;
+}
+
+const Home: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const rss = useAppSelector((state) => state.rss);
 
   useEffect(() => {
-    // dispatch(fetchRssXML("http://www.xatakandroid.com/tag/feeds/rss2.xml"));
-    dispatch(fetchRssXML("http://www.reddit.com/r/Bitcoin/.rss"));
+    dispatch(fetchRssXML("http://www.xatakandroid.com/tag/feeds/rss2.xml"));
+    // dispatch(fetchRssXML("http://www.reddit.com/r/Bitcoin/.rss"));
   }, []);
 
   return (
@@ -21,7 +26,9 @@ const Home: React.FC = () => {
       {rss.rssList.length ? (
         <FlatList
           data={rss.rssList}
-          renderItem={({ item }) => <ArticleCard {...item} />}
+          renderItem={({ item }) => (
+            <ArticleCard {...item} navigation={navigation} />
+          )}
           keyExtractor={({ id }) => id}
         />
       ) : (
