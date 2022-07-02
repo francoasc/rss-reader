@@ -27,12 +27,14 @@ export enum RssOrder {
 export interface RssState {
   rssList: RssResponse[];
   rssListCopy: RssResponse[];
+  rssListURLs: string[];
   order: RssOrder;
 }
 
 const initialState: RssState = {
   rssList: [],
   rssListCopy: [],
+  rssListURLs: [],
   order: RssOrder.DESCENDING,
 };
 
@@ -75,6 +77,16 @@ export const rssSlice = createSlice({
         );
       }
     },
+    addNewFeed: (state, action: PayloadAction<string>) => {
+      if (!state.rssListURLs.includes(action.payload)) {
+        state.rssListURLs.push(action.payload);
+      }
+    },
+    deleteFeed: (state, action: PayloadAction<string>) => {
+      state.rssListURLs = state.rssListURLs.filter(
+        (url) => url !== action.payload
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchRssXML.fulfilled, (state, action) => {
@@ -110,6 +122,7 @@ export const rssSlice = createSlice({
   },
 });
 
-export const { sortRssList, filterByTitle } = rssSlice.actions;
+export const { sortRssList, filterByTitle, addNewFeed, deleteFeed } =
+  rssSlice.actions;
 
 export default rssSlice.reducer;
