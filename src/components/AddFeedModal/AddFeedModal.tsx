@@ -5,7 +5,7 @@ import { FlatList, TextInput } from "react-native-gesture-handler";
 import styles from "./AddFeedModal.styles";
 import { Octicons, Entypo } from "@expo/vector-icons";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { addNewFeed, deleteFeed } from "../../redux/reducers/rssSlice";
+import { addNewFeedURL, deleteFeedURL } from "../../redux/reducers/rssSlice";
 
 interface Props {
   setShowAddNewFeed: (addNewBoolean: boolean) => void;
@@ -29,12 +29,12 @@ const AddFeedModal: React.FC<Props> = ({
 
   const handleAddFeed = () => {
     if (!url.length) return;
-    dispatch(addNewFeed(url));
+    dispatch(addNewFeedURL(url));
     setUrl("");
   };
 
   const handleDeleteFeed = (url: string) => {
-    dispatch(deleteFeed(url));
+    dispatch(deleteFeedURL(url));
   };
 
   return (
@@ -61,7 +61,7 @@ const AddFeedModal: React.FC<Props> = ({
             <FlatList
               data={rssListURLs}
               renderItem={({ item: url }) => (
-                <View>
+                <View style={styles.inputContainer}>
                   <Text>{url}</Text>
                   <TouchableOpacity onPress={() => handleDeleteFeed(url)}>
                     <Entypo name="cross" size={24} color="black" />
