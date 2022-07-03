@@ -221,6 +221,7 @@ export const rssSlice = createSlice({
 
       state.rssListCopy = [...state.rssList];
     });
+
     builder.addCase(addNewFeedURL.fulfilled, (state, action) => {
       if (Array.isArray(action.payload)) state.rssListURLs = action.payload;
     });

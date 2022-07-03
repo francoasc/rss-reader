@@ -11,6 +11,7 @@ import {
   fetchRssXML,
   loadDataFromAsyncStorage,
 } from "../../redux/reducers/rssSlice";
+
 import styles from "./Home.styles";
 
 interface Props {
@@ -19,6 +20,7 @@ interface Props {
 
 const Home: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
+
   const { rssListCopy, rssList, rssListURLs, isAsyncStorageLoading } =
     useAppSelector((state) => state.rss);
   const [showAddNewFeed, setShowAddNewFeed] = useState(false);
