@@ -3,8 +3,6 @@
 ## Demo
 Link: https://www.loom.com/share/221ed5784178419ba8561daf8ddc945c
 
-# Lector RSS básico
-
 ## Librerias utilizadas
 - `@react-navigation/native`
   - Es responsable de administrar el estado de su aplicación y vincular el Navigator de nivel superior al entorno de la aplicación.
