@@ -6,7 +6,11 @@ import AddFeedModal from "../../components/AddFeedModal/AddFeedModal";
 import ArticleCard from "../../components/ArticleCard";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import TopNavigationBar from "../../components/TopNavigationBar";
-import { fetchRssXML } from "../../redux/reducers/rssSlice";
+import {
+  changeIsAsyncStorageLoading,
+  fetchRssXML,
+  loadDataFromAsyncStorage,
+} from "../../redux/reducers/rssSlice";
 import styles from "./Home.styles";
 
 interface Props {
@@ -15,14 +19,16 @@ interface Props {
 
 const Home: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const { rssListCopy, rssList, rssListURLs } = useAppSelector(
-    (state) => state.rss
-  );
+  const { rssListCopy, rssList, rssListURLs, isAsyncStorageLoading } =
+    useAppSelector((state) => state.rss);
   const [showAddNewFeed, setShowAddNewFeed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // If there are feed urls then we fetch them
+    // If there aren't rss URLs added then we cancel the loading (so the user can add new rss URLs)
+    if (!rssListURLs?.length) setIsLoading(false);
+
+    // If there are feed urls then we fetch the data from them
     if (rssListURLs?.length) {
       rssListURLs.forEach((url) => {
         dispatch(fetchRssXML(url));
@@ -31,12 +37,20 @@ const Home: React.FC<Props> = ({ navigation }) => {
   }, [rssListURLs]);
 
   useEffect(() => {
-    if (!rssListURLs?.length) setIsLoading(false);
-
+    // if rssLists don't have data then we show "No data" on the screen
     if (rssListCopy?.length || rssList?.length) setIsLoading(false);
   }, [rssList]);
 
-  if (isLoading) return <LoadingSpinner />;
+  useEffect(() => {
+    // Loading data from AsyncStorage
+    dispatch(loadDataFromAsyncStorage());
+  }, []);
+
+  useEffect(() => {
+    if (isAsyncStorageLoading) dispatch(changeIsAsyncStorageLoading(false));
+  }, [isAsyncStorageLoading]);
+
+  if (isLoading || isAsyncStorageLoading) return <LoadingSpinner />;
 
   return (
     <View style={styles.container}>
