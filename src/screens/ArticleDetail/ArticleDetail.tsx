@@ -2,6 +2,7 @@ import { NavigationProp } from "@react-navigation/native";
 import React from "react";
 import { Image, Linking, Pressable, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import BackHeader from "../../components/BackHeader";
 import styles from "./ArticleDetail.styles";
 
 interface Props {
@@ -17,7 +18,7 @@ interface Props {
   };
 }
 
-const ArticleDetail: React.FC<Props> = ({ route }) => {
+const ArticleDetail: React.FC<Props> = ({ route, navigation }) => {
   const { title, description, image, url } = route.params;
 
   const handleOnPress = () => {
@@ -26,6 +27,7 @@ const ArticleDetail: React.FC<Props> = ({ route }) => {
 
   return (
     <View style={styles.mainContainer}>
+      <BackHeader onPressBack={navigation.goBack} />
       <Text style={styles.title}>{title}</Text>
       <ScrollView style={styles.innerContainer}>
         <View style={styles.descriptionContainer}>
