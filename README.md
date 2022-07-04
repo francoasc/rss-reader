@@ -29,7 +29,7 @@ Link: https://www.loom.com/share/221ed5784178419ba8561daf8ddc945c
   - Usado para el almacenamiento serializado de datos en el dispositivo para que los mismos puedan persistir en el cierre de la aplicación
 
 - `TypeScript`
-- JavaScript con esteroides, ayuda mucho con los tipados y posibles errores en el desarrollo de la aplicación además de un escalado futuro de la misma.
+  - JavaScript con esteroides, ayuda mucho con los tipados y posibles errores en el desarrollo de la aplicación además de un escalado futuro de la misma.
 
 ## Arquitectura
 - Basicamente use este patron por experiencia y porque es muy cómodo de usar, al haber sido una aplicación pequeña no pude usar otro tipo de arquitectura como lo hubiera hecho para un proyecto grande pero funciona muy bien y tiene la posibilidad de escalado futuro.
